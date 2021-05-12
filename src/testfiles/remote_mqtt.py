@@ -83,4 +83,4 @@ while True:
           print("Exit Button Pressed")
           exit()
 
-    time.sleep(0.5) # Let CTRL+C actually exit
+    time.sleep(1) # Let CTRL+C actually exit

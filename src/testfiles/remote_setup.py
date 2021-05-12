@@ -12,6 +12,7 @@ BTN_RIGHT = 80
 BTN_DOWN  = 81
 BTN_UP    = 82
 BTN_STOP  = 40 # Center Button
+BTN_RST   = 101 # Rest Button (3 lines)
 BTN_EXIT  = 41 # Back Button
 
 USB_VENDOR  = 0x1915 # Andoer
@@ -31,7 +32,7 @@ while True:
 
     try:
       control = dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize, USB_TIMEOUT)
-      print control
+      print (control)
     except:
       pass
       
@@ -50,9 +51,12 @@ while True:
 
       if BTN_STOP in control:
           print("Stop Button Pressed")
-
+      
+      if BTN_RST in control:
+          print("Reset Button Pressed")
+      
       if BTN_EXIT in control:
           print("Exit Button Pressed")
           exit()
 
-    time.sleep(0.5) # Let CTRL+C actually exit
+    time.sleep(1) # Let CTRL+C actually exit

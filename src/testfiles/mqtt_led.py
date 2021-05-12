@@ -30,6 +30,10 @@ def messageDecoder(client, userdata, msg):
 	elif message == "green/off":
 		gpio.output(27, gpio.LOW)
 		print("Green LED is OFF!")
+	elif message == "all/off":
+		gpio.output(27, gpio.LOW)
+		gpio.output(17, gpio.LOW)
+		print("All LEDs is OFF!")
 	else:
 		print("Unknown message!")
 
