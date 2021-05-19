@@ -1,46 +1,50 @@
 import usb.core
 import usb.util
 
-USB_IF      = 0 # Interface
-USB_TIMEOUT = 5 # Timeout in MS
+USB_IF = 0  # Interface
+USB_TIMEOUT = 5  # Timeout in MS
 
-BTN_LEFT  = 79
+BTN_LEFT = 79
 BTN_RIGHT = 80
-BTN_DOWN  = 81
-BTN_UP    = 82
-BTN_STOP  = 40 # Center Button
-BTN_EXIT  = 41 # Back Button
+BTN_DOWN = 81
+BTN_UP = 82
+BTN_STOP = 40  # Center Button
+BTN_EXIT = 41  # Back Button
 
-USB_VENDOR  = 0x1915 # Andoer
-USB_PRODUCT = 0x1047 # Universal Remote
+USB_VENDOR = 0x1915  # Andoer
+USB_PRODUCT = 0x1047  # Universal Remote
 
-class RemoteControl():
-    
+
+class RemoteControl:
     def __init__(self):
         self.remote = usb.core.find(idVendor=USB_VENDOR, idProduct=USB_PRODUCT)
 
-        self.endpoint = self.remote[0][(0,0)][0]
+        self.endpoint = self.remote[0][(0, 0)][0]
 
         if self.remote.is_kernel_driver_active(USB_IF) is True:
-          self.remote.detach_kernel_driver(USB_IF)
+            self.remote.detach_kernel_driver(USB_IF)
 
         usb.util.claim_interface(self.remote, USB_IF)
-        
+
     def read_remote_input(self):
         control = None
-        
+
         try:
-          control = self.remote.read(self.endpoint.bEndpointAddress, self.endpoint.wMaxPacketSize, USB_TIMEOUT)
-          print(control)
-          
+            control = self.remote.read(
+                self.endpoint.bEndpointAddress,
+                self.endpoint.wMaxPacketSize,
+                USB_TIMEOUT,
+            )
+            print(control)
+
         except:
-          pass
-        
+            pass
+
         if control != None:
             return self.parse_remote_input(control)
         else:
             return False
-        
+
     def parse_remote_input(self, control):
         if BTN_DOWN in control:
             print("Down Button Pressed")
@@ -60,4 +64,3 @@ class RemoteControl():
         elif BTN_EXIT in control:
             print("Exit Button Pressed")
             return "exit"
-        
