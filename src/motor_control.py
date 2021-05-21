@@ -36,7 +36,7 @@ class MotorControl(threading.Thread):
 
     def run(self):
         while not self.shutdown_flag.isSet():
-            remote_input = read_remote_input()
+            remote_input = self.read_remote_input()
 
             if remote_input:
                 print(remote_input)
