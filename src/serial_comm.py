@@ -14,7 +14,7 @@ class SerialComm:
         )
 
     def write(self, msg):
-        payload = msg + "\r\n"
+        payload = msg + "\n\r"
         self.ser.write(msg.encode("utf-8"))
 
     def read(self):

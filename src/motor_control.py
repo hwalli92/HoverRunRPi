@@ -72,11 +72,11 @@ class MotorControl(threading.Thread):
             return self.update_motors()
         elif BTN_LEFT in control:
             print("Left Button Pressed")
-            self.speed -= 50
+            self.steer -= 50
             return self.update_motors()
         elif BTN_RIGHT in control:
             print("Right Button Pressed")
-            self.speed += 50
+            self.steer += 50
             return self.update_motors()
         elif BTN_CTR in control:
             if self.enable == 0:
@@ -90,6 +90,10 @@ class MotorControl(threading.Thread):
         checksum = self.steer + (self.speed * 1000)
         msg = "move {} {} {}".format(self.steer, self.speed, checksum)
         self.serial.write(msg)
+
+        if self.enable == 0:
+            self.enable = 1
+
         return True
 
     def enable_motors(self):
