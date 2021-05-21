@@ -22,7 +22,7 @@ class SerialComm:
         while True:
             if self.ser.inWaiting() > 0:
                 rcv = self.ser.read()
-                if rcv.decode("utf-8") != "\n":
+                if rcv.decode("utf-8") != "\r":
                     data += rcv.decode("utf-8")
                 else:
                     return data
