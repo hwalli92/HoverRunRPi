@@ -13,12 +13,11 @@ class SerialComm:
             timeout=5.0,
         )
 
-    def serial_write(self, msg):
-
+    def write(self, msg):
         payload = msg + "\r\n"
         self.ser.write(msg.encode("utf-8"))
 
-    def serial_response(self):
+    def read(self):
         data = ""
         while True:
             if ser.inWaiting() > 0:
@@ -27,3 +26,6 @@ class SerialComm:
                     data += rcv.decode("utf-8")
                 else:
                     return data
+
+    def close_serial(self):
+        self.ser.close()

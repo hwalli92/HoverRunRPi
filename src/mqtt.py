@@ -23,4 +23,3 @@ class MQTTServer:
         self.mqttClient.publish("rpi/led", payload=payload[0])
 
         self.mqttClient.publish("rpi/motorctrl", payload=payload[1])
-
