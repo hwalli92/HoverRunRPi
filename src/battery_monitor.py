@@ -10,4 +10,4 @@ class BatteryMonitor:
         self.monitor.configure()
 
     def get_power(self):
-        return self.monitor.power
+        return self.monitor.power()

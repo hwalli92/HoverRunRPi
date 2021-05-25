@@ -14,34 +14,37 @@ class LCDScreen(threading.Thread):
 
         self.serial = serial_port
         self.shutdown_flag = threading.Event()
-        # self.lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=ROWS)
+        self.lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=ROWS)
         self.pi_battery = battery_monitor.BatteryMonitor()
 
     def run(self):
-        # self.lcd.printline(1, "Welcome".center(COLS))
-        # self.lcd.printline(2, "To HoverRun".center(COLS))
-        # self.lcd.clear()
+        self.lcd.printline(1, "Welcome".center(COLS))
+        self.lcd.printline(2, "To HoverRun".center(COLS))
+        time.sleep(1)
+        self.lcd.clear()
 
         while not self.shutdown_flag.isSet():
-            print(self.getHBStatus())
-            # self.lcd.printline(1, "HoverRun".center(COLS))
-            # self.lcd.printline(
-            #     2, "Batt-Pi:{}% HB:{}%".format(self.getPiBattery(), self.getHBBattery())
-            # )
-            # self.lcd.printline(1, "Speed: {}".format(self.getHBBattery()))
-            # self.lcd.printline(2, "Steer: {}".format(self.getHBBattery()))
+            #print(self.getHBStatus())
+            self.lcd.printline(0, "HoverRun".center(COLS))
+            self.lcd.printline(
+                1, "Hoverbrd Batt: {}%".format(self.getHBStatus())
+            )
+            self.lcd.printline(2, "Speed: {}".format(self.getHBStatus()))
+            self.lcd.printline(3, "Steer: {}".format(self.getHBStatus()))
 
-            time.sleep(5)
+            time.sleep(2)
 
-        # self.lcd.clear()
-        # self.lcd.printline(1, "Exiting".center(COLS))
-        # self.lcd.printline(1, "HoverRun".center(COLS))
+        self.lcd.clear()
+        self.lcd.printline(1, "Exiting".center(COLS))
+        self.lcd.printline(2, "HoverRun".center(COLS))
+        time.sleep(1)
+        self.lcd.clear()
 
     def getPiBattery(self):
-        return self.pi_battery.get_power()
+        return (self.pi_battery.get_power()/4000)*100
 
     def getHBStatus(self):
-        self.serial.write("status")
-        status = self.serial.read()
+        #self.serial.write("status")
+        #status = self.serial.read()
 
-        return status
+        return 100
