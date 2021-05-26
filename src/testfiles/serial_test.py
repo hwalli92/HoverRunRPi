@@ -19,7 +19,7 @@ try:
                 exit()
 
             msg = command + "\r"
-
+            print(msg.encode("utf-8"))
             port.write(msg.encode("utf-8"))
 
             data = ""

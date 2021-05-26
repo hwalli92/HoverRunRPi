@@ -30,7 +30,7 @@ class MotorControl(threading.Thread):
         self.serial = serial_port
 
         self.shutdown_flag = threading.Event()
-        self.speed = 100
+        self.speed = 50
         self.steer = 0
         self.enable = 0
 
@@ -42,6 +42,8 @@ class MotorControl(threading.Thread):
                 print(remote_input)
 
             time.sleep(1)
+        
+        self.disable_motors()
 
     def read_remote_input(self):
         control = None
@@ -81,7 +83,7 @@ class MotorControl(threading.Thread):
         elif BTN_CTR in control:
             if self.enable == 0:
                 self.enable = 1
-                return self.enable_motors()
+                return self.update_motors()
             else:
                 self.enable = 0
                 return self.disable_motors()

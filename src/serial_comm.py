@@ -14,15 +14,15 @@ class SerialComm:
         )
 
     def write(self, msg):
-        payload = msg + "\n\r"
-        self.ser.write(msg.encode("utf-8"))
+        payload = msg + "\r"
+        self.ser.write(payload.encode("utf-8"))
 
     def read(self):
         data = ""
         while True:
             if self.ser.inWaiting() > 0:
                 rcv = self.ser.read()
-                if rcv.decode("utf-8") != "\r":
+                if rcv.decode("utf-8") != "\n":
                     data += rcv.decode("utf-8")
                 else:
                     return data

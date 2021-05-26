@@ -1,6 +1,7 @@
 import time
 import threading
 import liquidcrystal_i2c
+import random
 
 import battery_monitor
 
@@ -22,17 +23,20 @@ class LCDScreen(threading.Thread):
         self.lcd.printline(2, "To HoverRun".center(COLS))
         time.sleep(1)
         self.lcd.clear()
-
+        
+        self.lcd.printline(0, "HoverRun".center(COLS))
+        
         while not self.shutdown_flag.isSet():
             status = self.getHBStatus()
-            print(status)
-            self.lcd.clear()
-            self.lcd.printline(0, "HoverRun".center(COLS))
-            self.lcd.printline(1, "Hoverbrd Batt: {}%".format((status[7] / 42) * 100))
-            self.lcd.printline(2, "SPD: L: {} R: {}".format(status[1], status[3]))
+        
+            self.clearLCDLine(1)
+            self.lcd.printline(1, "Hoverbrd Battery: {}".format(status[7]))
+            self.clearLCDLine(2)
+            self.lcd.printline(2, "SPD: L:{} R:{}".format(status[1], status[3]))
+            self.clearLCDLine(3)
             self.lcd.printline(3, "Steer: {}".format(status[5]))
 
-            time.sleep(2)
+            time.sleep(5)
 
         self.lcd.clear()
         self.lcd.printline(1, "Exiting".center(COLS))
@@ -40,14 +44,16 @@ class LCDScreen(threading.Thread):
         time.sleep(1)
         self.lcd.clear()
 
-    def getPiBattery(self):
-        return (self.pi_battery.get_power() / 4000) * 100
-
     def getHBStatus(self):
         self.serial.write("status")
         status = self.serial.read()
         print(status)
 
-        values = [int(value) for value in status.split() if value.isdigit()]
-        # values = [1, 1000, 2, 1000, 3, 60, 4, 38]
+        values = [int(value) for value in status.replace(":", " ").split()]
+
         return values
+        
+    def clearLCDLine(self, line):          
+        self.lcd.setCursor(0,line)
+        for n in range(0,COLS):
+            self.lcd.printstr(" ")
