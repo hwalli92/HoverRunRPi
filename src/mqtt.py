@@ -1,6 +1,7 @@
 import json
 import paho.mqtt.client as mqtt
 
+
 class MQTTServer:
     def __init__(self):
         clientName = "RPI Button"
@@ -13,10 +14,15 @@ class MQTTServer:
 
         self.mqttClient.connect(serverAddress)
 
-        self.trainingDetails = {"Type": "Manual", "Level": 1.0, "Limit": None, "Status": False}
-    
-	def connection_config(self, client, userdata, flags, rc):
-		self.mqttClient.subscribe("hvrrun/training")
+        self.trainingDetails = {
+            "Type": "Manual",
+            "Level": 1.0,
+            "Limit": None,
+            "Status": False,
+        }
+
+    def connection_config(self, client, userdata, flags, rc):
+        self.mqttClient.subscribe("hvrrun/training")
         self.mqttClient.subscribe("hvrrun/status")
 
     def message_decoder(self, client, userdata, msg):
