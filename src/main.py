@@ -30,8 +30,8 @@ def main():
 
     try:
         serial = serial_comm.SerialComm()
-        t1 = motor_control.MotorControl(serial)
-        t2 = lcd_screen.LCDScreen(serial)
+        t1 = lcd_screen.LCDScreen(serial)
+        t2 = motor_control.MotorControl(serial)
 
         t1.start()
         t2.start()

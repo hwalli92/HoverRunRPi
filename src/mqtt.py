@@ -1,5 +1,5 @@
+import json
 import paho.mqtt.client as mqtt
-
 
 class MQTTServer:
     def __init__(self):
@@ -12,14 +12,19 @@ class MQTTServer:
         self.mqttClient.on_message = self.message_decoder
 
         self.mqttClient.connect(serverAddress)
+
+        self.trainingDetails = {"Type": "Manual", "Level": 1.0, "Limit": None, "Status": False}
     
 	def connection_config(self, client, userdata, flags, rc):
-		self.mqttClient.subscribe("rpi/motorctrl")
+		self.mqttClient.subscribe("hvrrun/training")
+        self.mqttClient.subscribe("hvrrun/status")
 
     def message_decoder(self, client, userdata, msg):
-        self.message = msg.payload.decode(encoding="UTF-8")
+        message = str(msg.payload.decode("UTF-8", "ignore"))
 
-    def publish_message(self, payload):
-        self.mqttClient.publish("rpi/led", payload=payload[0])
+        self.trainingDetails = json.loads(message)
 
-        self.mqttClient.publish("rpi/motorctrl", payload=payload[1])
+        self.send_ack()
+
+    def send_ack(self):
+        self.mqttClient.publish("hvrrun/ack", payload=1)
