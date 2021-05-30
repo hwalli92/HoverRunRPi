@@ -31,9 +31,9 @@ def main():
 
     try:
         serial = serial_comm.SerialComm()
-        mqtt = mqtt.MQTTServer()
+        mqtt_server = mqtt.MQTTServer()
 
-        t1 = lcd_screen.LCDScreen(serial, mqtt)
+        t1 = lcd_screen.LCDScreen(serial, mqtt_server)
         t2 = motor_control.MotorControl(serial)
 
         t1.start()
