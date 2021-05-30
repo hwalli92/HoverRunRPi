@@ -3,8 +3,6 @@ import threading
 import liquidcrystal_i2c
 import random
 
-import mqtt
-
 COLS = 20
 ROWS = 4
 

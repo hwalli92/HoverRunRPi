@@ -5,6 +5,7 @@ import signal
 import serial_comm
 import motor_control
 import lcd_screen
+import mqtt
 
 
 class ServiceExit(Exception):
@@ -30,7 +31,9 @@ def main():
 
     try:
         serial = serial_comm.SerialComm()
-        t1 = lcd_screen.LCDScreen(serial)
+        mqtt = mqtt.MQTTServer()
+
+        t1 = lcd_screen.LCDScreen(serial, mqtt)
         t2 = motor_control.MotorControl(serial)
 
         t1.start()
