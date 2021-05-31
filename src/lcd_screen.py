@@ -38,7 +38,7 @@ class LCDScreen(threading.Thread):
             if self.mqtt.trainingDetails["Type"] == "Manual":
                 self.lcd.printline(
                     3,
-                    "{}, LVL:{}".format(
+                    "{}:S:{} L:None".format(
                         self.mqtt.trainingDetails["Type"],
                         self.mqtt.trainingDetails["Level"],
                     ),
@@ -46,7 +46,7 @@ class LCDScreen(threading.Thread):
             elif self.mqtt.trainingDetails["Type"] == "Time":
                 self.lcd.printline(
                     3,
-                    "{}, LVL:{}, {} min".format(
+                    "{}:S:{} L:{}min".format(
                         self.mqtt.trainingDetails["Type"],
                         self.mqtt.trainingDetails["Level"],
                         self.mqtt.trainingDetails["Limit"],
@@ -55,7 +55,7 @@ class LCDScreen(threading.Thread):
             elif self.mqtt.trainingDetails["Type"] == "Distance":
                 self.lcd.printline(
                     3,
-                    "{}, LVL:{}, {} km".format(
+                    "{}:S:{} L:{}K".format(
                         self.mqtt.trainingDetails["Type"],
                         self.mqtt.trainingDetails["Level"],
                         self.mqtt.trainingDetails["Limit"],

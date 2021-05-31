@@ -13,7 +13,8 @@ class MQTTServer:
         self.mqttClient.on_message = self.message_decoder
 
         self.mqttClient.connect(serverAddress)
-
+        self.mqttClient.loop_start()
+        
         self.trainingDetails = {
             "Type": "Manual",
             "Level": 1.0,
@@ -26,10 +27,12 @@ class MQTTServer:
 
     def message_decoder(self, client, userdata, msg):
         message = str(msg.payload.decode("UTF-8", "ignore"))
-        print("Received: {}".format(message))
-        self.trainingDetails = json.loads(message)
 
-        self.send_ack()
+        self.trainingDetails = json.loads(message)
+        
 
     def send_ack(self):
         self.mqttClient.publish("hvrrun/ack", payload=1)
+
+    def disconnect(self):
+        self.mqttClient.loop_stop()

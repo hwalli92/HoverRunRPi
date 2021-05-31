@@ -50,6 +50,7 @@ def main():
         t2.join()
 
     serial.close_serial()
+    mqtt_server.disconnect()
     print("Exiting main program")
 
 
