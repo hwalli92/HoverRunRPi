@@ -23,11 +23,10 @@ class MQTTServer:
 
     def connection_config(self, client, userdata, flags, rc):
         self.mqttClient.subscribe("hvrrun/training")
-        self.mqttClient.subscribe("hvrrun/status")
 
     def message_decoder(self, client, userdata, msg):
         message = str(msg.payload.decode("UTF-8", "ignore"))
-
+        print("Received: {}".format(message))
         self.trainingDetails = json.loads(message)
 
         self.send_ack()
