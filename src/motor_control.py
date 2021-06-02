@@ -40,15 +40,12 @@ class MotorControl(threading.Thread):
             BTN_DOWN: "down",
             BTN_LEFT: "left",
             BTN_RIGHT: "right",
-            BTN_CTR: "startstop",
+            BTN_CTR: "center",
         }
 
     def run(self):
         while not self.shutdown_flag.isSet():
-            remote_input = self.read_remote()
-
-            if remote_input:
-                print(remote_input)
+            self.read_remote()
 
             time.sleep(1)
 
@@ -66,36 +63,12 @@ class MotorControl(threading.Thread):
         except:
             pass
 
-        if control != None:
-            motor_control = getattr(self, self.remote_inputs[control[3]], lambda: False)
+        if control != None and control[3] != 0:
+            print(control)
+            motor_control = getattr(self, self.remote_inputs.get(control[3]), lambda: "Invalid Input")
             return motor_control()
         else:
             return False
-
-    def parse_remote_input(self, control):
-        if BTN_DOWN in control:
-            print("Down Button Pressed")
-            self.speed -= 50
-            return self.update_motors()
-        elif BTN_UP in control:
-            print("UP Button Pressed")
-            self.speed += 50
-            return self.update_motors()
-        elif BTN_LEFT in control:
-            print("Left Button Pressed")
-            self.steer -= 50
-            return self.update_motors()
-        elif BTN_RIGHT in control:
-            print("Right Button Pressed")
-            self.steer += 50
-            return self.update_motors()
-        elif BTN_CTR in control:
-            if self.enable == 0:
-                self.enable = 1
-                return self.update_motors()
-            else:
-                self.enable = 0
-                return self.disable_motors()
 
     def update_motors(self):
         checksum = self.steer + (self.speed * 1000)
@@ -105,6 +78,7 @@ class MotorControl(threading.Thread):
         return True
 
     def enable_motors(self):
+        print("Starting Motors")
         checksum = self.steer + (self.speed * 1000)
         msg = "move {} {} {}".format(self.steer, self.speed, checksum)
         self.serial.write(msg)
@@ -113,6 +87,7 @@ class MotorControl(threading.Thread):
         return True
 
     def disable_motors(self):
+        print("Stopping Motors")
         self.serial.write("stop")
         self.enable = 0
 
