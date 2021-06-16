@@ -71,9 +71,10 @@ class MotorControl(threading.Thread):
             return False
 
     def update_motors(self):
-        checksum = self.steer + (self.speed * 1000)
-        msg = "move {} {} {}".format(self.steer, self.speed, checksum)
-        self.serial.write(msg)
+        if self.enable == 1:
+            checksum = self.steer + (self.speed * 1000)
+            msg = "move {} {} {}".format(self.steer, self.speed, checksum)
+            self.serial.write(msg)
 
         return True
 
