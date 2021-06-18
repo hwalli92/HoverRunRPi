@@ -25,19 +25,19 @@ def get_readings():
     sumgy = 0
     sumgz = 0
 
-    for i in range(0, 1000):
+    for i in range(0, 1100):
         accel = mpu.acceleration
         gyro = mpu.gyro
 
         if i > 100:
-            sumax += accel[0] - offsetax
-            sumay += accel[1] - offsetay
-            sumaz += accel[2] - offsetaz
-            sumgx += gyro[0] - offsetgx
-            sumgy += gyro[1] - offsetgy
-            sumgz += gyro[2] - offsetgz
+            sumax += (accel[0] - offsetax)
+            sumay += (accel[1] - offsetay)
+            sumaz += (accel[2] - offsetaz)
+            sumgx += (gyro[0] - offsetgx)
+            sumgy += (gyro[1] - offsetgy)
+            sumgz += (gyro[2] - offsetgz)
 
-        time.sleep(0.05)
+        time.sleep(0.005)
 
     avgax = sumax / 1000
     avgay = sumax / 1000
@@ -45,7 +45,9 @@ def get_readings():
     avggx = sumax / 1000
     avggy = sumax / 1000
     avggz = sumax / 1000
-
+    
+    print("Average Readings: ", avgax, avgay, avgaz, avggx, avggy, avggz)
+    
     return (avgax, avgay, avgaz, avggx, avggy, avggz)
 
 
@@ -63,11 +65,15 @@ while True:
     ):
         break
 
-    offsetax -= avgax / 8
-    offsetay -= avgay / 8
-    offsetaz -= avgaz / 8
-    offsetgx -= avggx / 4
-    offsetgy -= avggy / 4
-    offsetgz -= avggz / 4
+    offsetax += (avgax / 8)
+    offsetay += (avgay / 8)
+    offsetaz += (avgaz / 8)
+    offsetgx += (avggx / 4)
+    offsetgy += (avggy / 4)
+    offsetgz += (avggz / 4)
+
 
 print("Offsets: ", offsetax, offsetay, offsetaz, offsetgx, offsetgy, offsetgz)
+
+print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(mpu.acceleration[0]-offsetax, mpu.acceleration[1]-offsetay, mpu.acceleration[2]-offsetaz))
+print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s"%(mpu.gyro[0]-offsetgx, mpu.gyro[1]-offsetgy, mpu.gyro[2]-offsetgz))
