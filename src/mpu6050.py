@@ -4,6 +4,9 @@ import board
 import adafruit_mpu6050
 import math
 
+INTERVAL = 0.02
+CFCONST = 0.98
+
 
 class MPU6050(threading.Thread):
     def __init__(self, serial_port):
@@ -16,12 +19,30 @@ class MPU6050(threading.Thread):
         self.serial = serial_port
 
         self.pitch = 0
+        self.gyrox = 0
+        self.cfanglex = 0
 
     def run(self):
 
         while not self.shutdown_flag.isSet():
+            start = time.clock()
 
-            time.sleep(1)
+            self.gyrox = self.mpu.gyro[0]
+            self.pitch = self.get_x_rotation()
+            self.cfanglex = (
+                CFCONST * (self.gyrox * INTERVAL) + (1 - CFCONST) * self.pitch
+            )
+
+            self.send_mpudata()
+
+            end = time.clock()
+
+            if (end - start) < INTERVAL:
+                time.sleep(INTERVAL - (end - start))
+
+    def send_mpudata(self):
+        msg = "mpu6050 {} {} {}".format(self.gyrox, self.pitch, self.cfanglex)
+        self.serial.write(msg)
 
     def dist(self, a, b):
         return math.sqrt((a * a) + (b * b))

@@ -6,6 +6,7 @@ import serial_comm
 import motor_control
 import lcd_screen
 import mqtt
+import mpu6050
 
 
 class ServiceExit(Exception):
@@ -35,9 +36,11 @@ def main():
 
         t1 = lcd_screen.LCDScreen(serial, mqtt_server)
         t2 = motor_control.MotorControl(serial, mqtt_server)
+        t3 = mpu6050.MPU6050(serial)
 
         t1.start()
         t2.start()
+        t3.start()
 
         while True:
             time.sleep(0.5)
@@ -45,9 +48,11 @@ def main():
     except ServiceExit:
         t1.shutdown_flag.set()
         t2.shutdown_flag.set()
+        t3.shutdown_flag.set()
 
         t1.join()
         t2.join()
+        t3.join()
 
     serial.close_serial()
     mqtt_server.disconnect()
