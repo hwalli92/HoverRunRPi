@@ -4,7 +4,7 @@ import board
 import adafruit_mpu6050
 import math
 
-INTERVAL = 0.02
+INTERVAL = 2
 CFCONST = 0.98
 
 
@@ -14,7 +14,7 @@ class MPU6050(threading.Thread):
         self.shutdown_flag = threading.Event()
 
         self.i2c = board.I2C()  # uses board.SCL and board.SDA
-        self.mpu = adafruit_mpu6050.MPU6050(i2c, address=0x69)
+        self.mpu = adafruit_mpu6050.MPU6050(self.i2c, address=0x69)
 
         self.serial = serial_port
 
@@ -38,10 +38,12 @@ class MPU6050(threading.Thread):
             end = time.clock()
 
             if (end - start) < INTERVAL:
+                print("Delay for: ", (INTERVAL - (end - start)))
                 time.sleep(INTERVAL - (end - start))
 
     def send_mpudata(self):
-        msg = "mpu6050 {} {} {}".format(self.gyrox, self.pitch, self.cfanglex)
+        msg = "mpu {} {} {}".format(self.gyrox, self.pitch, self.cfanglex)
+        print(msg)
         self.serial.write(msg)
 
     def dist(self, a, b):
@@ -50,13 +52,13 @@ class MPU6050(threading.Thread):
     def get_y_rotation(self):
         radians = math.atan2(
             self.mpu.acceleration[0],
-            dist(self.mpu.acceleration[1], self.mpu.acceleration[2]),
+            self.dist(self.mpu.acceleration[1], self.mpu.acceleration[2]),
         )
         return -math.degrees(radians)
 
     def get_x_rotation(self):
         radians = math.atan2(
             self.mpu.acceleration[1],
-            dist(self.mpu.acceleration[0], self.mpu.acceleration[2]),
+            self.dist(self.mpu.acceleration[0], self.mpu.acceleration[2]),
         )
         return math.degrees(radians)
