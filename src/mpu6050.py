@@ -149,9 +149,10 @@ if __name__ == "__main__":
     gyro_raw = mpu.get_gyro_data(raw=True)
     print(gyro_raw)
     print(mpu.get_gyro_data())
-
+    
+    accel_raw = mpu.get_accel_data(raw=True)
     print(mpu.get_accel_data(raw=True))
     print(mpu.get_accel_data())
 
-    mpu.axoffset = mpu.get_accel_data(raw=True)[0]
+    mpu.axoffset = accel_raw[0]
     print(mpu.axoffset)
