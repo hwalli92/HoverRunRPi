@@ -57,9 +57,9 @@ class MPU6050:
 
     def get_gyro_data(self, raw=False):
 
-        x = self.read_i2c_word(self.GYRO_XOUT)
-        y = self.read_i2c_word(self.GYRO_YOUT)
-        z = self.read_i2c_word(self.GYRO_ZOUT)
+        x = self.read_word(self.GYRO_XOUT)
+        y = self.read_word(self.GYRO_YOUT)
+        z = self.read_word(self.GYRO_ZOUT)
 
         scaler = self.GYRO_SCALE_MODIFIER_250DEG
 
@@ -70,9 +70,9 @@ class MPU6050:
 
     def get_accel_data(self, raw=False):
 
-        x = self.read_i2c_word(self.ACCEL_XOUT)
-        y = self.read_i2c_word(self.ACCEL_YOUT)
-        z = self.read_i2c_word(self.ACCEL_ZOUT)
+        x = self.read_word(self.ACCEL_XOUT)
+        y = self.read_word(self.ACCEL_YOUT)
+        z = self.read_word(self.ACCEL_ZOUT)
 
         scaler = self.ACCEL_SCALE_MODIFIER_2G
 
