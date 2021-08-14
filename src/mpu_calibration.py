@@ -44,8 +44,8 @@ def get_readings(mpudev):
 mpu = MPU6050(0x69)
 
 print(
-    "Old Offsets: aX = %5d, aY = %5d, aZ = %5d, gX = %5d, gY = %5d, gZ = %5d\n",
-    (
+    "Old Offsets: aX = %5d, aY = %5d, aZ = %5d, gX = %5d, gY = %5d, gZ = %5d\n"
+    % (
         mpu.axoffset,
         mpu.ayoffset,
         mpu.azoffset,
@@ -100,8 +100,8 @@ while True:
     offsetgz -= int(float(avggz) / 4)
 
 print(
-    "New Offsets: aX = %5d, aY = %5d, aZ = %5d, gX = %5d, gY = %5d, gZ = %5d\n",
-    (
+    "New Offsets: aX = %5d, aY = %5d, aZ = %5d, gX = %5d, gY = %5d, gZ = %5d\n"
+    % (
         mpu.axoffset,
         mpu.ayoffset,
         mpu.azoffset,
@@ -121,6 +121,6 @@ gy = data[4] / gyro_sensitivity
 gz = data[5] / gyro_sensitivity
 
 print(
-    "aX = %4.1f g, aY = %4.1f g, aZ = %4.1f g, gX = %6.1f °/s, gY = %6.1f °/s, gZ = %6.1f °/s\n",
-    (ax, ay, az, gx, gy, gz),
+    "aX = %4.1f g, aY = %4.1f g, aZ = %4.1f g, gX = %6.1f °/s, gY = %6.1f °/s, gZ = %6.1f °/s\n"
+    % (ax, ay, az, gx, gy, gz),
 )
