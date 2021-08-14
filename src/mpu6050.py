@@ -13,10 +13,16 @@ class MPU6050:
     ACCEL_XOUT = 0x3B
     ACCEL_YOUT = 0x3D
     ACCEL_ZOUT = 0x3F
+    ACCEL_XOFF = 0x06
+    ACCEL_YOFF = 0x08
+    ACCEL_ZOFF = 0x0A
 
     GYRO_XOUT = 0x43
     GYRO_YOUT = 0x45
     GYRO_ZOUT = 0x47
+    GYRO_XOFF = 0x13
+    GYRO_YOFF = 0x15
+    GYRO_ZOFF = 0x17
 
     ACCEL_SCALE_MODIFIER_2G = 16384.0
     GYRO_SCALE_MODIFIER_250DEG = 131.0
@@ -24,12 +30,6 @@ class MPU6050:
     def __init__(self, devaddr, bus=1):
         self.mpuaddr = devaddr
         self.bus = smbus.SMBus(bus)
-
-        # self.bus.write_byte_data(
-        #     self.mpuaddr, self.PWR_MGMT_1, 0x80
-        # )  # Wake Up and Reset Device
-
-        # sleep(0.1)
 
         self.bus.write_byte_data(
             self.mpuaddr, self.PWR_MGMT_1, 0x01
@@ -54,6 +54,18 @@ class MPU6050:
             return -((65535 - value) + 1)
         else:
             return value
+
+    def write_word(self, memregister, value):
+        if value < 0:
+            word = 65535 + 1 - (-value)
+        else:
+            word = value
+
+        high = value >> 8
+        low = value & 0xFF
+
+        self.bus.write_byte_data(self.mpuaddr, memregister, high)
+        self.bus.write_byte_data(self.mpuaddr, memregister + 1, low)
 
     def get_gyro_data(self, raw=False):
 
@@ -86,8 +98,12 @@ if __name__ == "__main__":
 
     mpu = MPU6050(0x69)
 
-    print(mpu.get_gyro_data(raw=True))
+    gyro_raw = mpu.get_gyro_data(raw=True)
+    print(gyro_raw)
     print(mpu.get_gyro_data())
 
     print(mpu.get_accel_data(raw=True))
     print(mpu.get_accel_data())
+
+    mpu.write_word(mpu.GYRO_XOFF, gyro_raw[0])
+    print(mpu.read_word(mpu.GYRO_XOFF))
