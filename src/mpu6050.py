@@ -25,14 +25,14 @@ class MPU6050:
         self.mpuaddr = devaddr
         self.bus = smbus.SMBus(bus)
 
-        self.bus.write_byte_data(
-            self.mpuaddr, self.PWR_MGMT_1, 0x80
-        )  # Wake Up and Reset Device
+        # self.bus.write_byte_data(
+        #     self.mpuaddr, self.PWR_MGMT_1, 0x80
+        # )  # Wake Up and Reset Device
 
-        sleep(0.1)
+        # sleep(0.1)
 
         self.bus.write_byte_data(
-            self.mpuaddr, self.PWR_MGMT_1, 0x00
+            self.mpuaddr, self.PWR_MGMT_1, 0x01
         )  # Set CLKSEL as PLL Gyro X Ref
         self.bus.write_byte_data(self.mpuaddr, self.SMPLRT_DIV, 0x07)  # Disable DLPF
         self.bus.write_byte_data(self.mpuaddr, self.CONFIG, 0x07)  # Sample Rate = 1 kHz
