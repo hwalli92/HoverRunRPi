@@ -30,11 +30,11 @@ def get_readings(mpudev):
         time.sleep(0.005)
 
     avgax = sumax / 1000
-    avgay = sumax / 1000
-    avgaz = sumax / 1000
-    avggx = sumax / 1000
-    avggy = sumax / 1000
-    avggz = sumax / 1000
+    avgay = sumay / 1000
+    avgaz = sumaz / 1000
+    avggx = sumgx / 1000
+    avggy = sumgy / 1000
+    avggz = sumgz / 1000
 
     print("Average Readings: ", avgax, avgay, avgaz, avggx, avggy, avggz)
 
