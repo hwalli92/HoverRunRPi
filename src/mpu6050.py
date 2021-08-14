@@ -141,6 +141,34 @@ class MPU6050:
         else:
             return [x / scaler, y / scaler, z / scaler]
 
+    def get_raw_data(self):
+
+        accel_raw = self.get_accel_data(raw=True)
+        gyro_raw = self.get_gyro_data(raw=True)
+
+        return [
+            accel_raw[0],
+            accel_raw[1],
+            accel_raw[2],
+            gyro_raw[0],
+            gyro_raw[1],
+            gyro_raw[2],
+        ]
+
+    def get_data(self):
+
+        accel_raw = self.get_accel_data()
+        gyro_raw = self.get_gyro_data()
+
+        return [
+            accel_raw[0],
+            accel_raw[1],
+            accel_raw[2],
+            gyro_raw[0],
+            gyro_raw[1],
+            gyro_raw[2],
+        ]
+
 
 if __name__ == "__main__":
 
@@ -149,7 +177,7 @@ if __name__ == "__main__":
     gyro_raw = mpu.get_gyro_data(raw=True)
     print(gyro_raw)
     print(mpu.get_gyro_data())
-    
+
     accel_raw = mpu.get_accel_data(raw=True)
     print(mpu.get_accel_data(raw=True))
     print(mpu.get_accel_data())
