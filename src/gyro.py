@@ -28,8 +28,8 @@ mpu.gzoffset = 19
 
 # while True:
 data = mpu.get_data()
-print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f g" % (data[0:3]))
-print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s" % (data[3:6]))
+print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f g" % (data[0], data[2], data[3]))
+print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s" % (data[3], data[4], data[5]))
 # print("Temperature: %.2f C" % mpu.temperature)
 # print(
 #     "x rotation: ",
