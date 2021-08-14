@@ -19,29 +19,29 @@ class MPU6050:
     GYRO_ZOUT = 0x47
 
     ACCEL_SCALE_MODIFIER_2G = 16384.0
-    GYRO_SCALE_MODIFIER_250DEG = 65.5  # 131.0
+    GYRO_SCALE_MODIFIER_250DEG = 131.0
 
     def __init__(self, devaddr, bus=1):
         self.mpuaddr = devaddr
         self.bus = smbus.SMBus(bus)
 
-        self.bus.write_byte_data(
-            self.mpuaddr, self.PWR_MGMT_1, 0x80
-        )  # Wake Up and Reset Device
+        # self.bus.write_byte_data(
+        #     self.mpuaddr, self.PWR_MGMT_1, 0x80
+        # )  # Wake Up and Reset Device
 
-        sleep(0.1)
+        # sleep(0.1)
 
         self.bus.write_byte_data(
-            self.mpuaddr, self.PWR_MGMT_1, 0x01
+            self.mpuaddr, self.PWR_MGMT_1, 0x00
         )  # Set CLKSEL as PLL Gyro X Ref
-        self.bus.write_byte_data(self.mpuaddr, self.SMPLRT_DIV, 0x00)  # Disable DLPF
-        self.bus.write_byte_data(self.mpuaddr, self.CONFIG, 0x00)  # Sample Rate = 1 kHz
-        self.bus.write_byte_data(
-            self.mpuaddr, self.GYRO_CONFIG, 0x08
-        )  # Set full scale range = 250 deg/s
-        self.bus.write_byte_data(
-            self.mpuaddr, self.ACCEL_CONFIG, 0x00
-        )  # Set full scale range = 2g
+        # self.bus.write_byte_data(self.mpuaddr, self.SMPLRT_DIV, 0x07)  # Disable DLPF
+        # self.bus.write_byte_data(self.mpuaddr, self.CONFIG, 0x07)  # Sample Rate = 1 kHz
+        # self.bus.write_byte_data(
+        #     self.mpuaddr, self.GYRO_CONFIG, 0x00
+        # )  # Set full scale range = 250 deg/s
+        # self.bus.write_byte_data(
+        #     self.mpuaddr, self.ACCEL_CONFIG, 0x00
+        # )  # Set full scale range = 2g
 
     def read_word(self, memregister):
 
