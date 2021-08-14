@@ -35,7 +35,7 @@ class MPU6050:
             self.mpuaddr, self.PWR_MGMT_1, 0x01
         )  # Set CLKSEL as PLL Gyro X Ref
         self.bus.write_byte_data(self.mpuaddr, self.SMPLRT_DIV, 0x00)  # Disable DLPF
-        self.bus.write_byte_data(self.mpuaddr, self.CONFIG, 0x07)  # Sample Rate = 1 kHz
+        self.bus.write_byte_data(self.mpuaddr, self.CONFIG, 0x00)  # Sample Rate = 1 kHz
         self.bus.write_byte_data(
             self.mpuaddr, self.GYRO_CONFIG, 0x08
         )  # Set full scale range = 250 deg/s
