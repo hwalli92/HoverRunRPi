@@ -67,6 +67,54 @@ class MPU6050:
         self.bus.write_byte_data(self.mpuaddr, memregister, high)
         self.bus.write_byte_data(self.mpuaddr, memregister + 1, low)
 
+    @property
+    def axoffset(self):
+        return self.read_word(self.ACCEL_XOFF)
+
+    @property
+    def ayoffset(self):
+        return self.read_word(self.ACCEL_YOFF)
+
+    @property
+    def azoffset(self):
+        return self.read_word(self.ACCEL_ZOFF)
+
+    @property
+    def gxoffset(self):
+        return self.read_word(self.GYRO_XOFF)
+
+    @property
+    def gyoffset(self):
+        return self.read_word(self.GYRO_YOFF)
+
+    @property
+    def gzoffset(self):
+        return self.read_word(self.GYRO_ZOFF)
+
+    @axoffset.setter
+    def azoffset(self, offset):
+        self.write_word(self.ACCEL_XOFF, offset)
+
+    @ayoffset.setter
+    def ayoffset(self, offset):
+        self.write_word(self.ACCEL_YOFF, offset)
+
+    @azoffset.setter
+    def azoffset(self, offset):
+        self.write_word(self.ACCEL_ZOFF, offset)
+
+    @gxoffset.setter
+    def gxoffset(self, offset):
+        self.write_word(self.GYRO_XOFF, offset)
+
+    @gyoffset.setter
+    def gyoffset(self, offset):
+        self.write_word(self.GYRO_YOFF, offset)
+
+    @gzoffset.setter
+    def gzoffset(self, offset):
+        self.write_word(self.GYRO_ZOFF, offset)
+
     def get_gyro_data(self, raw=False):
 
         x = self.read_word(self.GYRO_XOUT)
@@ -105,5 +153,5 @@ if __name__ == "__main__":
     print(mpu.get_accel_data(raw=True))
     print(mpu.get_accel_data())
 
-    mpu.write_word(mpu.GYRO_XOFF, gyro_raw[0])
-    print(mpu.read_word(mpu.GYRO_XOFF))
+    mpu.axoffset = mpu.get_accel_data(raw=True)[0]
+    print(mpu.axoffset)
