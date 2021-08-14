@@ -66,7 +66,7 @@ class MPU6050:
         if raw is True:
             return [x, y, z]
         else:
-            return [x, y, z] / scaler
+            return [x / scaler, y / scaler, z / scaler]
 
     def get_accel_data(self, raw=False):
 
@@ -79,7 +79,7 @@ class MPU6050:
         if raw is True:
             return [x, y, z]
         else:
-            return [x, y, z] / scaler
+            return [x / scaler, y / scaler, z / scaler]
 
 
 if __name__ == "__main__":
