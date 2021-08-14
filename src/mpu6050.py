@@ -92,7 +92,7 @@ class MPU6050:
         return self.read_word(self.GYRO_ZOFF)
 
     @axoffset.setter
-    def azoffset(self, offset):
+    def axoffset(self, offset):
         self.write_word(self.ACCEL_XOFF, offset)
 
     @ayoffset.setter
