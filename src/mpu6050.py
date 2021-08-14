@@ -3,6 +3,7 @@ import threading
 import board
 import adafruit_mpu6050
 import math
+from simple-pid import PID
 
 INTERVAL = 2
 CFCONST = 0.98
@@ -15,12 +16,14 @@ class MPU6050(threading.Thread):
 
         self.i2c = board.I2C()  # uses board.SCL and board.SDA
         self.mpu = adafruit_mpu6050.MPU6050(self.i2c, address=0x69)
+        self.pid = PID(3,0,0, setpoint=1)
 
         self.serial = serial_port
 
         self.pitch = 0
         self.gyrox = 0
         self.cfanglex = 0
+        self.pidvalue = 0
 
     def run(self):
 
@@ -33,12 +36,16 @@ class MPU6050(threading.Thread):
                 CFCONST * (self.gyrox * INTERVAL) + (1 - CFCONST) * self.pitch
             )
 
-            self.send_mpudata()
+            print("mpu {} {} {}".format(self.gyrox, self.pitch, self.cfanglex))
+            self.pidvalue = self.pid(self.cfanglex)
+            
+            print("pid {}".format(self.pidvalue))
+
+            #self.send_mpudata()
 
             end = time.clock()
 
             if (end - start) < INTERVAL:
-                print("Delay for: ", (INTERVAL - (end - start)))
                 time.sleep(INTERVAL - (end - start))
 
     def send_mpudata(self):
