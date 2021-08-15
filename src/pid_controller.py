@@ -25,8 +25,8 @@ class PIDController(threading.Thread):
 
     def run(self):
 
-        a = mpu.acceleration
-        g = mpu.gyro
+        a = self.mpu.acceleration
+        g = self.mpu.gyro
 
         self.roll = get_x_rotation(a[0], a[1], a[2])
         kalmanX.set_angle(self.roll)
@@ -36,8 +36,8 @@ class PIDController(threading.Thread):
         timer = time.time()
 
         while not self.shutdown_flag.isSet():
-            a = mpu.acceleration
-            g = mpu.gyro
+            a = self.mpu.acceleration
+            g = self.mpu.gyro
 
             dt = time.time() - timer
             timer = time.time()
