@@ -128,7 +128,7 @@ class MPU6050:
     @property
     def gyro(self):
 
-        raw = mpu.gyro_raw
+        raw = self.gyro_raw
 
         gx = raw[0] / self.GYRO_SCALE_MODIFIER_250DEG
         gy = raw[1] / self.GYRO_SCALE_MODIFIER_250DEG
@@ -148,7 +148,7 @@ class MPU6050:
     @property
     def acceleration(self):
 
-        raw = mpu.accel_raw
+        raw = self.accel_raw
 
         ax = (raw[0] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
         ay = (raw[1] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
