@@ -33,13 +33,7 @@ g = mpu.gyro
 print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f g" % (a[0], a[1], a[2]))
 print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s" % (g[0], g[1], g[2]))
 # print("Temperature: %.2f C" % mpu.temperature)
-# print(
-#     "x rotation: ",
-#     get_x_rotation(mpu.acceleration[0], mpu.acceleration[1], mpu.acceleration[2]),
-# )
-# print(
-#     "y rotation: ",
-#     get_y_rotation(mpu.acceleration[0], mpu.acceleration[1], mpu.acceleration[2]),
-# )
-# print("")
+print("x rotation: ", get_x_rotation(a[0], a[1], a[2]))
+print("y rotation: ", get_y_rotation(a[0], a[1], a[2]))
+print("")
 # time.sleep(1)
