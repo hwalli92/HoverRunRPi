@@ -26,6 +26,7 @@ class MPU6050:
 
     ACCEL_SCALE_MODIFIER_2G = 16384.0
     GYRO_SCALE_MODIFIER_250DEG = 131.0
+    GRAVITY = 9.80665
 
     def __init__(self, devaddr, bus=1):
         self.mpuaddr = devaddr
@@ -71,116 +72,97 @@ class MPU6050:
     def axoffset(self):
         return self.read_word(self.ACCEL_XOFF)
 
-    @property
-    def ayoffset(self):
-        return self.read_word(self.ACCEL_YOFF)
-
-    @property
-    def azoffset(self):
-        return self.read_word(self.ACCEL_ZOFF)
-
-    @property
-    def gxoffset(self):
-        return self.read_word(self.GYRO_XOFF)
-
-    @property
-    def gyoffset(self):
-        return self.read_word(self.GYRO_YOFF)
-
-    @property
-    def gzoffset(self):
-        return self.read_word(self.GYRO_ZOFF)
-
     @axoffset.setter
     def axoffset(self, offset):
         self.write_word(self.ACCEL_XOFF, offset)
+
+    @property
+    def ayoffset(self):
+        return self.read_word(self.ACCEL_YOFF)
 
     @ayoffset.setter
     def ayoffset(self, offset):
         self.write_word(self.ACCEL_YOFF, offset)
 
+    @property
+    def azoffset(self):
+        return self.read_word(self.ACCEL_ZOFF)
+
     @azoffset.setter
     def azoffset(self, offset):
         self.write_word(self.ACCEL_ZOFF, offset)
+
+    @property
+    def gxoffset(self):
+        return self.read_word(self.GYRO_XOFF)
 
     @gxoffset.setter
     def gxoffset(self, offset):
         self.write_word(self.GYRO_XOFF, offset)
 
+    @property
+    def gyoffset(self):
+        return self.read_word(self.GYRO_YOFF)
+
     @gyoffset.setter
     def gyoffset(self, offset):
         self.write_word(self.GYRO_YOFF, offset)
+
+    @property
+    def gzoffset(self):
+        return self.read_word(self.GYRO_ZOFF)
 
     @gzoffset.setter
     def gzoffset(self, offset):
         self.write_word(self.GYRO_ZOFF, offset)
 
-    def get_gyro_data(self, raw=False):
+    @property
+    def gyro_raw(self):
 
         x = self.read_word(self.GYRO_XOUT)
         y = self.read_word(self.GYRO_YOUT)
         z = self.read_word(self.GYRO_ZOUT)
 
-        scaler = self.GYRO_SCALE_MODIFIER_250DEG
+        return [x, y, z]
 
-        if raw is True:
-            return [x, y, z]
-        else:
-            return [x / scaler, y / scaler, z / scaler]
+    @property
+    def gyro(self):
 
-    def get_accel_data(self, raw=False):
+        raw = mpu.gyro_raw
+
+        gx = raw[0] / self.GYRO_SCALE_MODIFIER_250DEG
+        gy = raw[1] / self.GYRO_SCALE_MODIFIER_250DEG
+        gz = raw[2] / self.GYRO_SCALE_MODIFIER_250DEG
+
+        return [gx, gy, gz]
+
+    @property
+    def accel_raw(self):
 
         x = self.read_word(self.ACCEL_XOUT)
         y = self.read_word(self.ACCEL_YOUT)
         z = self.read_word(self.ACCEL_ZOUT)
 
-        scaler = self.ACCEL_SCALE_MODIFIER_2G
+        return [x, y, z]
 
-        if raw is True:
-            return [x, y, z]
-        else:
-            return [x / scaler, y / scaler, z / scaler]
+    @property
+    def acceleration(self):
 
-    def get_raw_data(self):
+        raw = mpu.accel_raw
 
-        accel_raw = self.get_accel_data(raw=True)
-        gyro_raw = self.get_gyro_data(raw=True)
+        ax = (raw[0] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
+        ay = (raw[1] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
+        az = (raw[2] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
 
-        return [
-            accel_raw[0],
-            accel_raw[1],
-            accel_raw[2],
-            gyro_raw[0],
-            gyro_raw[1],
-            gyro_raw[2],
-        ]
-
-    def get_data(self):
-
-        accel_raw = self.get_accel_data()
-        gyro_raw = self.get_gyro_data()
-
-        return [
-            accel_raw[0],
-            accel_raw[1],
-            accel_raw[2],
-            gyro_raw[0],
-            gyro_raw[1],
-            gyro_raw[2],
-        ]
+        return [ax, ay, az]
 
 
 if __name__ == "__main__":
 
     mpu = MPU6050(0x69)
 
-    gyro_raw = mpu.get_gyro_data(raw=True)
-    print(gyro_raw)
-    print(mpu.get_gyro_data())
+    print(mpu.gyro_raw)
+    print(mpu.gyro)
 
-    accel_raw = mpu.get_accel_data(raw=True)
-    print(mpu.get_accel_data(raw=True))
-    print(mpu.get_accel_data())
-
-    mpu.axoffset = accel_raw[0]
-    print(mpu.axoffset)
+    print(mpu.accel_raw)
+    print(mpu.acceleration)

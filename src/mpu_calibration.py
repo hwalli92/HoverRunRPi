@@ -17,15 +17,16 @@ def get_readings(mpudev):
     sumgz = 0
 
     for i in range(0, (sample_size + 100)):
-        data = mpudev.get_raw_data()
+        a = mpu.accel_raw
+        g = mpu.gyro_raw
 
         if i > 100:
-            sumax += data[0]
-            sumay += data[1]
-            sumaz += data[2]
-            sumgx += data[3]
-            sumgy += data[4]
-            sumgz += data[5]
+            sumax += a[0]
+            sumay += a[1]
+            sumaz += a[2]
+            sumgx += g[0]
+            sumgy += g[1]
+            sumgz += g[2]
 
         time.sleep(0.005)
 
