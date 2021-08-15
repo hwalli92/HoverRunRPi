@@ -3,17 +3,17 @@ import threading
 import math
 from mpu6050 import MPU6050
 from kalman import KalmanFilter
-from simple-pid import PID
+from simple_pid import PID
+
 
 class PIDController(threading.Thread):
-
     def __init__(self, serial_port):
         threading.Thread.__init__(self)
         self.shutdown_flag = threading.Event()
 
         self.mpu = MPU6050(0x69)
         self.kalmanX = KalmanFilter()
-        self.pid = PID(3,0,0, setpoint=1)
+        self.pid = PID(3, 0, 0, setpoint=1)
 
         self.serial = serial_port
 
@@ -48,13 +48,16 @@ class PIDController(threading.Thread):
             self.gyro_roll = g[0] * dt
             self.comp_roll = 0.93 * (self.comp_roll + g[0] * dt) + 0.07 * self.roll
 
-
-            print("mpu {} {} {} {}".format(self.roll, self.gyro_roll, self.kalman_roll, self.comp_roll))
+            print(
+                "mpu {} {} {} {}".format(
+                    self.roll, self.gyro_roll, self.kalman_roll, self.comp_roll
+                )
+            )
             self.pidvalue = self.pid(self.comp_roll)
-            
+
             print("pid {}".format(self.pidvalue))
 
-            #self.send_mpudata()
+            # self.send_mpudata()
 
             time.sleep(2)
 
