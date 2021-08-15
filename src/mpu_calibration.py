@@ -112,14 +112,15 @@ print(
     ),
 )
 
-data = mpu.get_raw_data()
+a = mpu.accel_raw
+g = mpu.gyro_raw
 
-ax = data[0] / accel_sensitivity
-ay = data[1] / accel_sensitivity
-az = data[2] / accel_sensitivity
-gx = data[3] / gyro_sensitivity
-gy = data[4] / gyro_sensitivity
-gz = data[5] / gyro_sensitivity
+ax = a[0] / accel_sensitivity
+ay = a[1] / accel_sensitivity
+az = a[2] / accel_sensitivity
+gx = g[0] / gyro_sensitivity
+gy = g[1] / gyro_sensitivity
+gz = g[2] / gyro_sensitivity
 
 print(
     "aX = %4.1f g, aY = %4.1f g, aZ = %4.1f g, gX = %6.1f °/s, gY = %6.1f °/s, gZ = %6.1f °/s\n"
