@@ -13,14 +13,14 @@ class PIDController(threading.Thread):
 
         self.mpu = MPU6050(0x69)
         self.kalmanX = KalmanFilter()
-        self.pid = PID(3, 0, 0, setpoint=1)
+        self.pid = PID(3, 0, 0, setpoint=5)
 
         self.serial = serial_port
 
         self.roll = 0
         self.gyro_roll = 0
         self.comp_roll = 0
-        self.kalman_roll
+        self.kalman_roll = 0
         self.pidvalue = 0
 
     def run(self):
