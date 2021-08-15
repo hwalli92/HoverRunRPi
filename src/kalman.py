@@ -1,15 +1,22 @@
+"""
+    Kalman Filter class for MPU 6050
+
+    Recreation of the below two libraries:
+
+    1. https://github.com/TKJElectronics/KalmanFilter (Arduino Library)
+    2. https://github.com/rocheparadox/Kalman-Filter-Python-for-mpu6050 (Python Library)
+"""
 
 
 class KalmanFilter:
-
     def __init__(self):
         self.q_angle = 0.001
         self.q_bias = 0.003
         self.r_measure = 0.03
-        
+
         self.angle = 0.0
         self.bias = 0.0
-        
+
         self.cov = [[0.0, 0.0], [0.0, 0.0]]
 
     def get_angle(self, measured_angle, measured_rate, dt):
@@ -17,7 +24,9 @@ class KalmanFilter:
         rate = measured_rate - self.bias
         self.angle = dt * rate
 
-        self.cov[0][0] += dt * (dt * self.cov[1][1] - self.cov[0][1] - self.cov[1][0] + self.q_angle)
+        self.cov[0][0] += dt * (
+            dt * self.cov[1][1] - self.cov[0][1] - self.cov[1][0] + self.q_angle
+        )
         self.cov[0][1] -= dt * self.cov[1][1]
         self.cov[1][0] -= dt * self.cov[1][1]
         self.cov[1][1] += self.q_bias * dt
@@ -62,4 +71,3 @@ class KalmanFilter:
 
     def get_rmeasure(self):
         return self.r_measure
-

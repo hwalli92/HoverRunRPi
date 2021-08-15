@@ -1,3 +1,17 @@
+"""
+    MPU6050 Interface Library for Raspberry Pi
+
+    Connections
+    VCC - 5V  (Pin 4)
+    GND - GND (Pin 9)
+    SCL - SCL (Pin 5)
+    SDA - SDA (Pin 3)
+
+    Adapted from the below libraries:
+    1. https://github.com/adafruit/Adafruit_CircuitPython_MPU6050/
+    2. https://github.com/woolseyj/MPU-6050.swift
+"""
+
 from time import sleep
 import smbus
 

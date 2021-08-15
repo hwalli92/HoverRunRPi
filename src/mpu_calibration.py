@@ -1,3 +1,10 @@
+"""
+    MPU6050 Calibration script
+
+    Adapted from: https://github.com/WoolseyWorkshop/Article-Interfacing-An-MPU6050-Gyroscope-Accelerometer-Sensor-Module-To-A-Raspberry-Pi/tree/master/mpu6050_calibration
+"""
+
+
 import time
 from mpu6050 import MPU6050
 

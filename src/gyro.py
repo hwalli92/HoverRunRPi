@@ -1,3 +1,10 @@
+"""
+    MPU6050 Test Script
+
+    Adapted from: https://github.com/rocheparadox/Kalman-Filter-Python-for-mpu6050/blob/master/AngleOMeter.py
+"""
+
+
 import time
 from mpu6050 import MPU6050
 from kalman import KalmanFilter
