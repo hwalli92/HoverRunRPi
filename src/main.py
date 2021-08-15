@@ -6,7 +6,7 @@ import serial_comm
 import motor_control
 import lcd_screen
 import mqtt
-import mpu6050
+import pid_controller
 
 
 class ServiceExit(Exception):
@@ -36,7 +36,7 @@ def main():
 
         t1 = lcd_screen.LCDScreen(serial, mqtt_server)
         t2 = motor_control.MotorControl(serial, mqtt_server)
-        t3 = mpu6050.MPU6050(serial)
+        t3 = pid_controller.PIDController(serial)
 
         t1.start()
         t2.start()
