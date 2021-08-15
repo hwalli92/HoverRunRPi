@@ -26,7 +26,6 @@ class MPU6050:
 
     ACCEL_SCALE_MODIFIER_2G = 16384.0
     GYRO_SCALE_MODIFIER_250DEG = 131.0
-    GRAVITY = 9.80665
 
     def __init__(self, devaddr, bus=1):
         self.mpuaddr = devaddr
@@ -150,9 +149,9 @@ class MPU6050:
 
         raw = self.accel_raw
 
-        ax = (raw[0] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
-        ay = (raw[1] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
-        az = (raw[2] / self.ACCEL_SCALE_MODIFIER_2G) * self.GRAVITY
+        ax = raw[0] / self.ACCEL_SCALE_MODIFIER_2G
+        ay = raw[1] / self.ACCEL_SCALE_MODIFIER_2G
+        az = raw[2] / self.ACCEL_SCALE_MODIFIER_2G
 
         return [ax, ay, az]
 
