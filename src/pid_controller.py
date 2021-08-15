@@ -56,12 +56,12 @@ class PIDController(threading.Thread):
 
             print("pid %.2f" % (self.pidvalue))
 
-            # self.send_mpudata()
+            self.send_mpudata()
 
             time.sleep(2)
 
     def send_mpudata(self):
-        msg = "pid {}".format(self.pidvalue)
+        msg = "pid %.2f" % (self.pidvalue)
         print(msg)
         self.serial.write(msg)
 
