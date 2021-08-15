@@ -28,8 +28,8 @@ class PIDController(threading.Thread):
         a = self.mpu.acceleration
         g = self.mpu.gyro
 
-        self.roll = get_x_rotation(a[0], a[1], a[2])
-        kalmanX.set_angle(self.roll)
+        self.roll = self.get_x_rotation(a[0], a[1], a[2])
+        self.kalmanX.set_angle(self.roll)
         self.gyro_roll = self.roll
         self.comp_roll = self.roll
 
@@ -42,8 +42,8 @@ class PIDController(threading.Thread):
             dt = time.time() - timer
             timer = time.time()
 
-            self.roll = get_x_rotation(a[0], a[1], a[2])
-            self.kalman_roll = kalmanX.get_angle(self.roll, g[0], dt)
+            self.roll = self.get_x_rotation(a[0], a[1], a[2])
+            self.kalman_roll = self.kalmanX.get_angle(self.roll, g[0], dt)
 
             self.gyro_roll = g[0] * dt
             self.comp_roll = 0.93 * (self.comp_roll + g[0] * dt) + 0.07 * self.roll
