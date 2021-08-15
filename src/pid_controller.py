@@ -28,7 +28,7 @@ class PIDController(threading.Thread):
         a = self.mpu.acceleration
         g = self.mpu.gyro
 
-        self.roll = self.get_x_rotation(a[0], a[1], a[2])
+        self.roll = self.get_x_rotation(a)
         self.kalmanX.set_angle(self.roll)
         self.gyro_roll = self.roll
         self.comp_roll = self.roll
@@ -42,7 +42,7 @@ class PIDController(threading.Thread):
             dt = time.time() - timer
             timer = time.time()
 
-            self.roll = self.get_x_rotation(a[0], a[1], a[2])
+            self.roll = self.get_x_rotation(a)
             self.kalman_roll = self.kalmanX.get_angle(self.roll, g[0], dt)
 
             self.gyro_roll = g[0] * dt
@@ -69,16 +69,14 @@ class PIDController(threading.Thread):
     def dist(self, a, b):
         return math.sqrt((a * a) + (b * b))
 
-    def get_y_rotation(self):
+    def get_y_rotation(self, acceleration):
         radians = math.atan2(
-            self.mpu.acceleration[0],
-            self.dist(self.mpu.acceleration[1], self.mpu.acceleration[2]),
+            acceleration[0], self.dist(acceleration[1], acceleration[2]),
         )
         return -math.degrees(radians)
 
-    def get_x_rotation(self):
+    def get_x_rotation(self, acceleration):
         radians = math.atan2(
-            self.mpu.acceleration[1],
-            self.dist(self.mpu.acceleration[0], self.mpu.acceleration[2]),
+            acceleration[1], self.dist(acceleration[0], acceleration[2]),
         )
         return math.degrees(radians)
