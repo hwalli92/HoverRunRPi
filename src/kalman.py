@@ -45,9 +45,6 @@ class KalmanFilter:
     def set_angle(self, angle):
         self.angle = angle
 
-    def get_angle(self):
-        return self.angle
-
     def set_qangle(self, qangle):
         self.q_angle = qangle
 
