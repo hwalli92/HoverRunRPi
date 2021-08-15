@@ -24,6 +24,8 @@ class MPU6050:
     GYRO_YOFF = 0x15
     GYRO_ZOFF = 0x17
 
+    TEMP_OUT = 0x41
+
     ACCEL_SCALE_MODIFIER_2G = 16384.0
     GYRO_SCALE_MODIFIER_250DEG = 131.0
 
@@ -154,6 +156,19 @@ class MPU6050:
         az = raw[2] / self.ACCEL_SCALE_MODIFIER_2G
 
         return [ax, ay, az]
+
+    @property
+    def temp_raw(self):
+        return self.read_word(self.TEMP_OUT)
+
+    @property
+    def temperature(self):
+
+        raw = self.temp_raw
+
+        temp = (raw / 340.0) + 36.53
+
+        return temp
 
 
 if __name__ == "__main__":
