@@ -13,7 +13,7 @@ class PIDController(threading.Thread):
 
         self.mpu = MPU6050(0x69)
         self.kalmanX = KalmanFilter()
-        self.pid = PID(5, 1, 2, setpoint=0)
+        self.pid = PID(1, 0.25, 0.5, setpoint=2)
 
         self.serial = serial_port
 
@@ -52,14 +52,14 @@ class PIDController(threading.Thread):
                 "mpu %.2f, %.2f, %.2f, %.2f"
                 % (self.roll, self.gyro_roll, self.kalman_roll, self.comp_roll)
             )
-            self.pidvalue = self.pid(self.kalman_roll)
+            self.pidvalue = self.pid(abs(self.kalman_roll))
 
             print("pid %.2f" % (self.pidvalue))
 
             self.send_pid()
 
             time.sleep(2)
-            
+
         self.pidvalue = 0
         self.send_pid()
 
