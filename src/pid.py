@@ -10,7 +10,7 @@ class PID:
         self.setpoint = setpoint
 
         self.iterm = 0
-        self.last_time = 0
+        self.last_time = time.time()
         self.last_value = 0
         self.max_value = 500
 
@@ -21,7 +21,7 @@ class PID:
         self.last_time = this_time
 
         error = self.setpoint - current
-
+        
         self.iterm += error * dt
 
         dterm = (self.last_value - current) / dt

@@ -13,7 +13,7 @@ class PIDController(threading.Thread):
 
         self.mpu = MPU6050(0x69)
         self.kalmanX = KalmanFilter()
-        self.pid = PID(8, 0.5, 0, setpoint=2)
+        self.pid = PID(10, 0.05, 0, setpoint=0)
 
         self.serial = serial_port
 
@@ -45,20 +45,20 @@ class PIDController(threading.Thread):
             self.roll = self.get_x_rotation(a)
             self.kalman_roll = self.kalmanX.get_angle(self.roll, g[0], dt)
 
-            self.gyro_roll = g[0] * dt
-            self.comp_roll = 0.93 * (self.comp_roll + g[0] * dt) + 0.07 * self.roll
-
-            print(
-                "mpu %.2f, %.2f, %.2f, %.2f"
-                % (self.roll, self.gyro_roll, self.kalman_roll, self.comp_roll)
-            )
+            #self.gyro_roll = g[0] * dt
+            #self.comp_roll = 0.93 * (self.comp_roll + g[0] * dt) + 0.07 * self.roll
+            print("mpu %.2f" % (self.kalman_roll))
+            #print(
+            #    "mpu %.2f, %.2f, %.2f, %.2f"
+            #    % (self.roll, self.gyro_roll, self.kalman_roll, self.comp_roll)
+            #)
             self.pidvalue = self.pid.pid_compute(self.kalman_roll)
 
             print("pid %.2f" % (self.pidvalue))
 
             self.send_pid()
 
-            time.sleep(1)
+            time.sleep(2)
 
         self.pidvalue = 0
         self.send_pid()
