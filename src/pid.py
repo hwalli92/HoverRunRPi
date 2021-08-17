@@ -32,7 +32,7 @@ class PID:
 
         if pidvalue > self.max_value:
             return self.max_value
-        elif pidvalue < self.max_value:
+        elif pidvalue < -self.max_value:
             return -self.max_value
 
         return pidvalue
