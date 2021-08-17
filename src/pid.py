@@ -10,30 +10,27 @@ class PID:
         self.setpoint = setpoint
 
         self.iterm = 0
-        self.last_time = time.time()
+        self.last_time = None
         self.last_value = 0
         self.max_value = 500
 
     def pid_compute(self, current):
 
-        this_time = time.time()
-        dt = this_time - self.last_time
-        self.last_time = this_time
+        now = time.time()
+        dt = now - self.last_time if (now - self.last_time) else 1e-16
+        self.last_time = now
 
         error = self.setpoint - current
-        
+
         self.iterm += error * dt
+        self.iterm = self.clamp(self.iterm)
 
         dterm = (self.last_value - current) / dt
 
         self.last_value = current
 
         pidvalue = (error * self.kp) + (self.iterm * self.ki) + (dterm * self.kd)
-
-        if pidvalue > self.max_value:
-            return self.max_value
-        elif pidvalue < -self.max_value:
-            return -self.max_value
+        pidvalue = self.clamp(pidvalue)
 
         return pidvalue
 
@@ -48,3 +45,12 @@ class PID:
     def set_kd(self, kd):
 
         self.kd = kd
+
+    def clamp(self, value):
+
+        if value > self.max_value:
+            return self.max_value
+        elif value < -self.max_value:
+            return -self.max_value
+
+        return value
