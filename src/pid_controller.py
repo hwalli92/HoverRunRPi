@@ -13,7 +13,7 @@ class PIDController(threading.Thread):
 
         self.mpu = MPU6050(0x69)
         self.kalmanX = KalmanFilter()
-        self.pid = PID(8, 2, 0, setpoint=2)
+        self.pid = PID(8, 0.5, 0, setpoint=2)
 
         self.serial = serial_port
 
