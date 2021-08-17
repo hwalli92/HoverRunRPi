@@ -24,9 +24,9 @@ class PID:
 
         self.iterm += error * dt
 
-        dterm = (self.old_value - current) / dt
+        dterm = (self.last_value - current) / dt
 
-        self.old_value = current
+        self.last_value = current
 
         pidvalue = (error * self.kp) + (self.iterm * self.ki) + (dterm * self.kd)
 
