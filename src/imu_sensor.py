@@ -41,7 +41,7 @@ class IMUSensor(threading.Thread):
             self.comp_roll = CFCONST * (self.gyro_roll * dt) + (1 - CFCONST) * self.roll
             # self.comp_roll = 0.93 * (self.comp_roll + self.gyro_roll * dt) + 0.07 * self.roll
 
-            print("mpu {} {} {}".format(self.gyrox, self.pitch, self.cfanglex))
+            print("mpu {} {} {}".format(self.gyro_roll, self.roll, self.comp_roll))
 
             self.send_mpudata()
 
