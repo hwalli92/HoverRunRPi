@@ -43,7 +43,7 @@ class LCDScreen(threading.Thread):
                         self.mqtt.trainingDetails["Level"],
                     ),
                 )
-            elif self.mqtt.trainingDetails["Type"] == "Time":
+            elif self.mqtt.trainingDetails["Type"] == "Timed":
                 self.lcd.printline(
                     3,
                     "{}:S:{} L:{}min".format(
