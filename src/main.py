@@ -36,9 +36,10 @@ def main():
         mqtt_server = mqtt.MQTTServer(serial)
 
         # t1 = pid_controller.PIDController(serial)
-        t1 = imu_sensor.IMUSensor(serial)
+        #t1 = imu_sensor.IMUSensor(serial)
+        t1 = lcd_screen.LCDScreen(serial, mqtt_server)
         t2 = motor_control.MotorControl(serial, mqtt_server)
-        t3 = lcd_screen.LCDScreen(serial, mqtt_server)
+        t3 = imu_sensor.IMUSensor(serial)
 
         t1.start()
         t2.start()

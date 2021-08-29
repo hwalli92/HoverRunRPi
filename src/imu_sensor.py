@@ -45,7 +45,7 @@ class IMUSensor(threading.Thread):
 
             self.send_mpudata()
 
-            time.sleep(1)
+            time.sleep(2)
 
     def send_mpudata(self):
         msg = "mpu {} {} {}".format(self.gyro_roll, self.roll, self.comp_roll)
