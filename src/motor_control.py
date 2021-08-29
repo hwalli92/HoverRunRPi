@@ -108,13 +108,13 @@ class MotorControl(threading.Thread):
 
     def left(self):
         print("LEFT Button Pressed")
-        self.steer -= 50
+        self.steer += 50
 
         return self.update_motors()
 
     def right(self):
         print("RIGHT Button Pressed")
-        self.steer += 50
+        self.steer -= 50
 
         return self.update_motors()
 
