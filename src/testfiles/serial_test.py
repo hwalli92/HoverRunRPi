@@ -18,7 +18,7 @@ try:
                 port.close()
                 exit()
 
-            msg = command + "\r"
+            msg = command + "\n"
             print(msg.encode("utf-8"))
             port.write(msg.encode("utf-8"))
 
@@ -26,7 +26,7 @@ try:
             while True:
                 if port.inWaiting() > 0:
                     rcv = port.read()
-                    if rcv.decode("utf-8") != "\r":
+                    if rcv.decode("utf-8") != "\n":
                         data += rcv.decode("utf-8")
                     else:
                         print(data)
