@@ -48,7 +48,7 @@ class MQTTServer:
         self.mqttClient.publish("hvrrun/ack", payload=ack)
 
     def send_pid_params(self):
-        msg = "pid %d %.2f %d " % (
+        msg = "pid %.1f %.2f %.1f " % (
             self.pid_settings["kp"],
             self.pid_settings["ki"],
             self.pid_settings["kd"],

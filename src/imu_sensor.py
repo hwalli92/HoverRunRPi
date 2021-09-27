@@ -2,6 +2,7 @@ import time
 import threading
 import math
 from mpu6050 import MPU6050
+from kalman import KalmanFilter
 
 CFCONST = 0.98
 
@@ -12,11 +13,13 @@ class IMUSensor(threading.Thread):
         self.shutdown_flag = threading.Event()
 
         self.mpu = MPU6050(0x69)
+        self.kalmanX = KalmanFilter()
         self.serial = serial_port
 
         self.roll = 0
         self.gyro_roll = 0
         self.comp_roll = 0
+        self.kalman_roll = 0
 
     def run(self):
 
@@ -24,7 +27,8 @@ class IMUSensor(threading.Thread):
         g = self.mpu.gyro
 
         self.roll = self.get_x_rotation(a)
-        self.gyro_roll = self.roll
+        self.kalmanX.set_angle(self.roll)
+        #self.gyro_roll = self.roll
         self.comp_roll = self.roll
 
         timer = time.time()
@@ -36,19 +40,20 @@ class IMUSensor(threading.Thread):
             dt = time.time() - timer
             timer = time.time()
 
-            self.gyro_roll = g[0]
+            #self.gyro_roll = g[0]
             self.roll = self.get_x_rotation(a)
+            self.kalman_roll = self.kalmanX.get_angle(self.roll, g[0], dt)
             self.comp_roll = CFCONST * (self.gyro_roll * dt) + (1 - CFCONST) * self.roll
             # self.comp_roll = 0.93 * (self.comp_roll + self.gyro_roll * dt) + 0.07 * self.roll
 
-            print("mpu {} {} {}".format(self.gyro_roll, self.roll, self.comp_roll))
+            print("mpu {} {} {}".format(self.roll, self.comp_roll, self.kalman_roll))
 
             self.send_mpudata()
 
             time.sleep(2)
 
     def send_mpudata(self):
-        msg = "mpu {} {} {}".format(self.gyro_roll, self.roll, self.comp_roll)
+        msg = "mpu {} {} {}".format(self.roll, self.comp_roll, self.kalman_roll)
         self.serial.write(msg)
 
     def dist(self, a, b):
