@@ -6,8 +6,6 @@ import serial_comm
 import motor_control
 import lcd_screen
 import mqtt
-import pid_controller
-import imu_sensor
 
 
 class ServiceExit(Exception):
@@ -35,14 +33,11 @@ def main():
         serial = serial_comm.SerialComm()
         mqtt_server = mqtt.MQTTServer(serial)
 
-        # t1 = pid_controller.PIDController(serial)
-        t1 = imu_sensor.IMUSensor(serial)
-        t2 = motor_control.MotorControl(serial, mqtt_server)
-        t3 = lcd_screen.LCDScreen(serial, mqtt_server)
+        t1 = lcd_screen.LCDScreen(serial)
+        t2 = motor_control.MotorControl(serial)
 
         t1.start()
         t2.start()
-        t3.start()
 
         while True:
             time.sleep(0.5)
@@ -50,11 +45,9 @@ def main():
     except ServiceExit:
         t1.shutdown_flag.set()
         t2.shutdown_flag.set()
-        t3.shutdown_flag.set()
 
         t1.join()
         t2.join()
-        t3.join()
 
     serial.close_serial()
     mqtt_server.disconnect()

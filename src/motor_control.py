@@ -18,7 +18,7 @@ USB_PRODUCT = 0x1047  # Universal Remote
 
 
 class MotorControl(threading.Thread):
-    def __init__(self, serial_port, mqtt_server):
+    def __init__(self, serial_port):
         threading.Thread.__init__(self)
         self.shutdown_flag = threading.Event()
 
@@ -30,7 +30,6 @@ class MotorControl(threading.Thread):
         usb.util.claim_interface(self.remote, USB_IF)
 
         self.serial = serial_port
-        self.mqtt = mqtt_server
 
         self.speed = 50
         self.steer = 0
@@ -80,8 +79,7 @@ class MotorControl(threading.Thread):
 
     def enable_motors(self):
         print("Starting Motors")
-        checksum = self.steer + (self.speed * 1000)
-        msg = "move {} {} {}".format(self.steer, self.speed, checksum)
+        msg = "start"
         self.serial.write(msg)
         self.enable = 1
 
@@ -96,15 +94,17 @@ class MotorControl(threading.Thread):
 
     def up(self):
         print("UP Button Pressed")
-        self.speed += 50
+        msg = "speed up"
+        self.serial.write(msg)
 
-        return self.update_motors()
+        return True
 
     def down(self):
         print("DOWN Button Pressed")
-        self.speed -= 50
+        msg = "speed down"
+        self.serial.write(msg)
 
-        return self.update_motors()
+        return True
 
     def left(self):
         print("LEFT Button Pressed")

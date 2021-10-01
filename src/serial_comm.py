@@ -12,9 +12,11 @@ class SerialComm:
             bytesize=serial.EIGHTBITS,
             timeout=5.0,
         )
+        
+        self.ser.flush()
 
     def write(self, msg):
-        payload = msg + "\r"
+        payload = msg + "\n"
         self.ser.write(payload.encode("utf-8"))
 
     def read(self):
@@ -28,4 +30,5 @@ class SerialComm:
                     return data
 
     def close_serial(self):
+        self.ser.flush()
         self.ser.close()
