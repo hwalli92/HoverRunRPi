@@ -6,8 +6,8 @@ import threading
 USB_IF = 0  # Interface
 USB_TIMEOUT = 5  # Timeout in MS
 
-BTN_LEFT = 79
-BTN_RIGHT = 80
+BTN_LEFT = 80
+BTN_RIGHT = 79
 BTN_DOWN = 81
 BTN_UP = 82
 BTN_CTR = 40  # Center Button
@@ -108,15 +108,17 @@ class MotorControl(threading.Thread):
 
     def left(self):
         print("LEFT Button Pressed")
-        self.steer -= 50
+        msg = "left turn"
+        self.serial.write(msg)
 
-        return self.update_motors()
+        return True
 
     def right(self):
         print("RIGHT Button Pressed")
-        self.steer += 50
+        msg = "right turn"
+        self.serial.write(msg)
 
-        return self.update_motors()
+        return True
 
     def center(self):
         print("CENTER Button Pressed")
