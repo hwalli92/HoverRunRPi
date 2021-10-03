@@ -17,7 +17,7 @@ class MQTTServer:
 
         self.serial = serial
 
-        self.pid_settings = {"Kp": 10, "Ki": 0.0, "Kd": 0}
+        self.pid_settings = {"kp": 0.0, "ki": 0.0, "kd": 0.0}
 
     def connection_config(self, client, userdata, flags, rc):
         self.mqttClient.subscribe("hvrrun/speedup")
@@ -25,15 +25,16 @@ class MQTTServer:
         self.mqttClient.subscribe("hvrrun/pidsettings")
 
     def message_decoder(self, client, userdata, msg):
-        message = str(msg.payload.decode("UTF-8", "ignore"))
-
+        print("New msg on topic: {}".format(msg.topic))
+        
         if msg.topic == "hvrrun/speedup":
             self.serial.write("speed up")
             self.send_ack(1)
-        elif msg_topic == "hvrrun/speeddown":
+        elif msg.topic == "hvrrun/speeddown":
             self.serial.write("speed down")
             self.send_ack(1)
         elif msg.topic == "hvrrun/pidsettings":
+            message = str(msg.payload.decode("UTF-8", "ignore"))
             self.pid_settings = json.loads(message)
             self.send_pid_params()
             self.send_ack(1)
@@ -45,9 +46,9 @@ class MQTTServer:
 
     def send_pid_params(self):
         msg = "pid %f %f %f " % (
-            self.pid_settings["Kp"],
-            self.pid_settings["Ki"],
-            self.pid_settings["Kd"],
+            self.pid_settings["kp"],
+            self.pid_settings["ki"],
+            self.pid_settings["kd"],
         )
         self.serial.write(msg)
 
